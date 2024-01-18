@@ -38,15 +38,16 @@ public class Main {
         CloseableHttpResponse response = httpClient.execute(request);
 
         String body = new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
-        Fact fact = mapper.readValue(body, new TypeReference<Fact>() {});
+        Fact fact = mapper.readValue(body, new TypeReference<Fact>() {
+        });
         response.close();
         httpClient.close();
         String name = fact.nameFile();
         String type = name.split("\\.", 2)[1];
-        if (fact.getMedia_type().equals("image")) {
+        if (fact.getMediaType().equals("image")) {
             BufferedImage img = ImageIO.read(new URL(fact.getHdurl()));
             ImageIO.write(img, type, new File(name));
-        } else if (fact.getMedia_type().equals("video")) {
+        } else if (fact.getMediaType().equals("video")) {
 // не уверен, что выйдет - пробовал на примере с видео из ютуба, выходит ошибка. Пока разбираюсь, в чём дело(
             VGet video = new VGet(new URL(fact.getHdurl()), new File(name));
             video.download();
